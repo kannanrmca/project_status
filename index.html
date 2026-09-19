@@ -1,0 +1,627 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regional Project Rollout Status</title>
+
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --border: #e5e7eb;
+      --green: #22a06b;
+      --yellow: #e5a500;
+      --red: #e5484d;
+      --accent: #315efb;
+      --accent-soft: #eef2ff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 42px 24px 60px;
+    }
+
+    .header {
+      margin-bottom: 30px;
+    }
+
+    .eyebrow {
+      margin: 0 0 7px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.2;
+      letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Region pills */
+
+    .region-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .region-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 15px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--card);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition:
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease,
+        transform 0.18s ease;
+    }
+
+    .region-pill:hover {
+      border-color: #c9d0dc;
+      transform: translateY(-1px);
+    }
+
+    .region-pill.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      box-shadow: 0 0 0 3px rgba(49, 94, 251, 0.08);
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex: 0 0 9px;
+    }
+
+    .status-green {
+      background: var(--green);
+    }
+
+    .status-yellow {
+      background: var(--yellow);
+    }
+
+    .status-red {
+      background: var(--red);
+    }
+
+    /* Detail card */
+
+    .detail-panel {
+      min-height: 390px;
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--card);
+      box-shadow: 0 4px 18px rgba(16, 24, 40, 0.04);
+    }
+
+    .empty-state {
+      min-height: 330px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .empty-state-content {
+      max-width: 420px;
+    }
+
+    .empty-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 15px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: #f1f3f7;
+      font-size: 22px;
+    }
+
+    .empty-state h2 {
+      margin: 0 0 7px;
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    .empty-state p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .region-name {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: -0.02em;
+    }
+
+    .last-updated {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-label.green {
+      color: #137a4f;
+      background: #eaf8f1;
+    }
+
+    .status-label.yellow {
+      color: #8a6200;
+      background: #fff6d9;
+    }
+
+    .status-label.red {
+      color: #b42328;
+      background: #fdebed;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 45px;
+      padding-top: 28px;
+    }
+
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .accomplishments {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+    }
+
+    .accomplishment {
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .check {
+      width: 19px;
+      height: 19px;
+      flex: 0 0 19px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #eaf8f1;
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      margin-top: 1px;
+    }
+
+    .milestone-card {
+      padding: 19px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fafbfc;
+    }
+
+    .milestone-date {
+      margin: 0 0 7px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .milestone-label {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+
+    .loading,
+    .error {
+      padding: 40px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .error {
+      color: #b42328;
+    }
+
+    @media (max-width: 720px) {
+      .app {
+        padding: 28px 16px 40px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .detail-panel {
+        padding: 22px;
+      }
+
+      .detail-header {
+        flex-direction: column;
+      }
+
+      .detail-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <header class="header">
+      <p class="eyebrow">Project Rollout</p>
+      <h1>Regional Status Dashboard</h1>
+      <p class="subtitle">
+        Select a region to view rollout progress and upcoming milestones.
+      </p>
+    </header>
+
+    <section
+      id="regionPills"
+      class="region-pills"
+      aria-label="Regions"
+    >
+      <div class="loading">Loading regional status...</div>
+    </section>
+
+    <section id="detailPanel" class="detail-panel">
+      <div class="empty-state">
+        <div class="empty-state-content">
+          <div class="empty-icon">◎</div>
+          <h2>Select a region</h2>
+          <p>
+            Choose a region above to view its current rollout status,
+            accomplishments, and next milestone.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const CSV_FILE = "region_status.csv";
+
+    const regionPills = document.getElementById("regionPills");
+    const detailPanel = document.getElementById("detailPanel");
+
+    /*
+     * Basic CSV parser.
+     * Handles quoted values containing commas and escaped quotes.
+     */
+    function parseCSV(csvText) {
+      const rows = [];
+      let row = [];
+      let value = "";
+      let insideQuotes = false;
+
+      for (let i = 0; i < csvText.length; i++) {
+        const char = csvText[i];
+        const nextChar = csvText[i + 1];
+
+        if (char === '"' && insideQuotes && nextChar === '"') {
+          value += '"';
+          i++;
+        } else if (char === '"') {
+          insideQuotes = !insideQuotes;
+        } else if (char === "," && !insideQuotes) {
+          row.push(value.trim());
+          value = "";
+        } else if (
+          (char === "\n" || char === "\r") &&
+          !insideQuotes
+        ) {
+          if (char === "\r" && nextChar === "\n") {
+            i++;
+          }
+
+          row.push(value.trim());
+          value = "";
+
+          if (row.some(cell => cell !== "")) {
+            rows.push(row);
+          }
+
+          row = [];
+        } else {
+          value += char;
+        }
+      }
+
+      if (value !== "" || row.length > 0) {
+        row.push(value.trim());
+
+        if (row.some(cell => cell !== "")) {
+          rows.push(row);
+        }
+      }
+
+      if (!rows.length) {
+        return [];
+      }
+
+      const headers = rows[0];
+
+      return rows.slice(1).map(cells => {
+        const record = {};
+
+        headers.forEach((header, index) => {
+          record[header] = cells[index] || "";
+        });
+
+        return record;
+      });
+    }
+
+    function normalizeStatus(status) {
+      const value = String(status || "").trim().toLowerCase();
+
+      if (value.includes("green") || value.includes("on track")) {
+        return "green";
+      }
+
+      if (
+        value.includes("yellow") ||
+        value.includes("at risk") ||
+        value.includes("warning")
+      ) {
+        return "yellow";
+      }
+
+      if (
+        value.includes("red") ||
+        value.includes("blocked") ||
+        value.includes("critical")
+      ) {
+        return "red";
+      }
+
+      return "yellow";
+    }
+
+    function escapeHTML(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatDate(dateValue) {
+      if (!dateValue) {
+        return "Date not specified";
+      }
+
+      const date = new Date(dateValue);
+
+      if (Number.isNaN(date.getTime())) {
+        return escapeHTML(dateValue);
+      }
+
+      return date.toLocaleDateString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    function renderRegionPills(regions) {
+      regionPills.innerHTML = "";
+
+      regions.forEach((region, index) => {
+        const status = normalizeStatus(region.Status);
+
+        const pill = document.createElement("button");
+        pill.type = "button";
+        pill.className = "region-pill";
+        pill.dataset.index = index;
+
+        pill.innerHTML = 
+          <span class="status-dot status-${status}"
+                aria-hidden="true"></span>
+          <span>${escapeHTML(region.Region)}</span>
+        ;
+
+        pill.addEventListener("click", () => {
+          document
+            .querySelectorAll(".region-pill")
+            .forEach(item => item.classList.remove("active"));
+
+          pill.classList.add("active");
+          renderDetail(regions[index]);
+        });
+
+        regionPills.appendChild(pill);
+      });
+
+      if (regions.length > 0) {
+        regionPills.firstElementChild.click();
+      }
+    }
+
+    function renderDetail(region) {
+      const status = normalizeStatus(region.Status);
+
+      const accomplishments = [
+        region.Accomplishment_1,
+        region.Accomplishment_2,
+        region.Accomplishment_3
+      ].filter(Boolean);
+
+      detailPanel.innerHTML = 
+        <div class="detail-header">
+          <div>
+            <h2 class="region-name">
+              ${escapeHTML(region.Region)}
+            </h2>
+
+            ${
+              region.Last_Updated
+                ? <p class="last-updated">
+                    Last updated ${escapeHTML(region.Last_Updated)}
+                  </p>
+                : ""
+            }
+          </div>
+
+          <div class="status-label ${status}">
+            <span class="status-dot status-${status}"
+                  aria-hidden="true"></span>
+            ${escapeHTML(region.Status || "Status unavailable")}
+          </div>
+        </div>
+
+        <div class="detail-grid">
+          <div>
+            <h3 class="section-title">Top Accomplishments</h3>
+
+            <div class="accomplishments">
+              ${
+                accomplishments.length
+                  ? accomplishments
+                      .map(
+                        item => 
+                          <div class="accomplishment">
+                            <span class="check">✓</span>
+                            <span>${escapeHTML(item)}</span>
+                          </div>
+                        
+                      )
+                      .join("")
+                  : <div class="accomplishment">
+                       No accomplishments recorded.
+                     </div>
+              }
+            </div>
+          </div>
+
+          <div>
+            <h3 class="section-title">Next Milestone</h3>
+
+            <div class="milestone-card">
+              <p class="milestone-date">
+                ${formatDate(region.Milestone_Date)}
+              </p>
+
+              <p class="milestone-label">
+                ${escapeHTML(
+                  region.Milestone_Label || "Milestone not specified"
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+      ;
+    }
+
+    async function loadRegionStatus() {
+      try {
+        const response = await fetch(CSV_FILE, {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            Unable to load ${CSV_FILE} (${response.status})
+          );
+        }
+
+        const csvText = await response.text();
+        const regions = parseCSV(csvText);
+
+        if (!regions.length) {
+          throw new Error("The CSV file contains no region records.");
+        }
+
+        renderRegionPills(regions);
+      } catch (error) {
+        console.error(error);
+
+        regionPills.innerHTML = 
+          <div class="error">
+            Unable to load regional status data.
+            Please check that <strong>${CSV_FILE}</strong>
+            is in the same folder.
+          </div>
+        ;
+      }
+    }
+
+    loadRegionStatus();
+  </script>
+</body>
+</html>

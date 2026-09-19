@@ -1,0 +1,7 @@
+Region,Status,Accomplishment_1,Accomplishment_2,Accomplishment_3,Milestone_Date,Milestone_Label,Last_Updated
+Region 1,green,Site assessment complete,Cabling finished ahead of schedule,Training curriculum finalized,June 15 2026,Go-live,2026-05-14
+Region 2,yellow,Workstation install 80% complete,Two super-users identified,Signage ordered,June 20 2026,Training start,2026-05-14
+Region 3,green,Pilot go-live successful,Agent adoption at 81%,Hypercare support winding down,July 15 2026,Hypercare ends,2026-05-14
+Region 4,yellow,Budget approved,Two new team leads onboarded,Site assessment scheduled,July 25 2026,Go-live target,2026-05-14
+Region 5,red,Vendor contract signed,Kickoff meeting held,,TBD,Site assessment delayed,2026-05-14
+Region 6,green,Requirements gathering complete,Team leads briefed,Facilities walkthrough done,August 4 2026,Cabling start,2026-05-14
