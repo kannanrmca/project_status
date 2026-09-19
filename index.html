@@ -1,4 +1,4 @@
-html
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -490,11 +490,11 @@ html
         pill.className = "region-pill";
         pill.dataset.index = index;
 
-        pill.innerHTML = 
+        pill.innerHTML = `
           <span class="status-dot status-${status}"
                 aria-hidden="true"></span>
           <span>${escapeHTML(region.Region)}</span>
-        ;
+        `;
 
         pill.addEventListener("click", () => {
           document
@@ -522,7 +522,7 @@ html
         region.Accomplishment_3
       ].filter(Boolean);
 
-      detailPanel.innerHTML = 
+      detailPanel.innerHTML = `
         <div class="detail-header">
           <div>
             <h2 class="region-name">
@@ -531,9 +531,9 @@ html
 
             ${
               region.Last_Updated
-                ? <p class="last-updated">
+                ? `<p class="last-updated">
                     Last updated ${escapeHTML(region.Last_Updated)}
-                  </p>
+                  </p>`
                 : ""
             }
           </div>
@@ -554,17 +554,17 @@ html
                 accomplishments.length
                   ? accomplishments
                       .map(
-                        item => 
+                        item => `
                           <div class="accomplishment">
                             <span class="check">✓</span>
                             <span>${escapeHTML(item)}</span>
                           </div>
-                        
+                        `
                       )
                       .join("")
-                  : <div class="accomplishment">
+                  : `<div class="accomplishment">
                        No accomplishments recorded.
-                     </div>
+                     </div>`
               }
             </div>
           </div>
@@ -585,7 +585,7 @@ html
             </div>
           </div>
         </div>
-      ;
+      `;
     }
 
     async function loadRegionStatus() {
@@ -596,7 +596,7 @@ html
 
         if (!response.ok) {
           throw new Error(
-            Unable to load ${CSV_FILE} (${response.status})
+            `Unable to load ${CSV_FILE} (${response.status})`
           );
         }
 
@@ -611,13 +611,13 @@ html
       } catch (error) {
         console.error(error);
 
-        regionPills.innerHTML = 
+        regionPills.innerHTML = `
           <div class="error">
             Unable to load regional status data.
             Please check that <strong>${CSV_FILE}</strong>
             is in the same folder.
           </div>
-        ;
+        `;
       }
     }
 
@@ -625,3 +625,4 @@ html
   </script>
 </body>
 </html>
+```
